@@ -148,9 +148,33 @@ def breadthFirstSearch(problem):
                 queue.push((succ[0], pathToSucc))
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visited = set()
+    priorityQueue = PriorityQueue()
+    priorityQueue.push((problem.getStartState(), []), 0)
+    while not (priorityQueue.isEmpty()):
+        currentNode = priorityQueue.pop()
+        currentState = currentNode[0]
+        pathToNode = currentNode[1]
+        visited.add(currentState)
+        if problem.isGoalState(currentState):
+            return pathToNode
+        successors = problem.getSuccessors(currentState)
 
+        for succ in successors:
+            dir = succ[1]
+            # store the full path to each successor
+            pathToSucc = pathToNode.copy()
+            if succ[0] not in visited:
+                if dir == 'South':
+                    pathToSucc.append(Directions.SOUTH)
+                elif dir == 'West':
+                    pathToSucc.append(Directions.WEST)
+                elif dir == 'North':
+                    pathToSucc.append(Directions.NORTH)
+                elif dir == 'East':
+                    pathToSucc.append(Directions.EAST)
+                succPriority = succ[2]
+                priorityQueue.push((succ[0], pathToSucc), succPriority)
 def nullHeuristic(state, problem=None):
     """
     A heuristic function estimates the cost from the current state to the nearest
